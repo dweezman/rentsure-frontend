@@ -42,5 +42,6 @@ example
 /ios
 /android
 
-# Claude Code local settings
+# local editor and assistant settings
 .claude/
+AGENTS.md
