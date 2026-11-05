@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { photoSource } from '@/utils/photos';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 
@@ -25,7 +26,7 @@ export function PhotoCarousel({ photos, title }: { photos: string[]; title: stri
           {photos.map((uri, i) => (
             <Image
               key={uri + i}
-              source={uri}
+              source={photoSource(uri)}
               style={{ width, height: width * 0.62 }}
               contentFit="cover"
               transition={200}

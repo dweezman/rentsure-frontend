@@ -1,5 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
+import { photoSource } from '@/utils/photos';
 import { StyleSheet, View } from 'react-native';
 
 import { AppText, Badge, Card, VerificationBadge } from '@/components/ui';
@@ -25,7 +26,7 @@ export function PropertyCard({
     <Card padded={false} onPress={onPress} style={styles.card}>
       <View style={compact ? styles.rowLayout : undefined}>
         <Image
-          source={property.photos[0]}
+          source={photoSource(property.photos[0])}
           style={compact ? styles.thumb : styles.image}
           contentFit="cover"
           transition={200}
@@ -36,6 +37,7 @@ export function PropertyCard({
             <View style={styles.badges}>
               <VerificationBadge status={property.verificationStatus} subject="property" />
               {landlordStatus === 'verified' && <VerificationBadge status="verified" subject="landlord" />}
+              {property.listingStatus === 'let' && <Badge label="Let" icon="key-outline" />}
             </View>
           )}
           <AppText variant="heading" numberOfLines={1}>

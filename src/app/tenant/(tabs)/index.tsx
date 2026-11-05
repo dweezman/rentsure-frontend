@@ -40,14 +40,15 @@ export default function Explore() {
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     const band = PRICE_BANDS.find((b) => b.value === price)!;
+    // Let properties are shown too (marked "Let", no Apply button), listed after the available ones.
     return state.properties.filter(
       (p) =>
-        p.listingStatus === 'listed' &&
+        (p.listingStatus === 'listed' || p.listingStatus === 'let') &&
         (!q || [p.title, p.area, p.city, p.state, p.address].some((f) => f.toLowerCase().includes(q))) &&
         (type === 'all' || p.type === type) &&
         band.test(yearly(p)) &&
         (!verifiedOnly || p.verificationStatus === 'verified'),
-    );
+    ).sort((a, b) => Number(a.listingStatus === 'let') - Number(b.listingStatus === 'let'));
   }, [state.properties, query, type, price, verifiedOnly]);
 
   const twoCol = width >= 640;

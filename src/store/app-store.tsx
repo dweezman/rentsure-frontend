@@ -75,7 +75,21 @@ export type FraudInput = Pick<FraudReport, 'reason' | 'description' | 'evidence'
 
 const now = () => new Date().toISOString();
 
-const STORAGE_KEY = 'rentsure-state-v1';
+const STORAGE_KEY = 'rentsure-state-v2';
+
+/**
+ * Saved demo data keeps old photo lists, so sample properties and repair requests always take their photos
+ * from the latest mock data. Anything the user created (new listings, new repair requests) is left alone.
+ */
+function withLatestSamplePhotos(s: State): State {
+  const propPhotos = new Map(mock.properties.map((p) => [p.id, p.photos]));
+  const repairPhotos = new Map(mock.maintenance.map((m) => [m.id, m.photos]));
+  return {
+    ...s,
+    properties: s.properties.map((p) => (propPhotos.has(p.id) ? { ...p, photos: propPhotos.get(p.id)! } : p)),
+    maintenance: s.maintenance.map((m) => (repairPhotos.has(m.id) ? { ...m, photos: repairPhotos.get(m.id)! } : m)),
+  };
+}
 
 function useAppState() {
   const [state, setState] = useState<State>(initialState);
@@ -87,7 +101,7 @@ function useAppState() {
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
-        if (raw) setState({ ...initialState, ...(JSON.parse(raw) as State) });
+        if (raw) setState(withLatestSamplePhotos({ ...initialState, ...(JSON.parse(raw) as State) }));
       })
       .catch(() => {})
       .finally(() => setHydrated(true));

@@ -21,7 +21,7 @@ import { addDays, addMonths, scheduleMonths, todayISO } from '@/utils/format';
 const today = todayISO();
 const daysAgo = (n: number) => addDays(today, -n);
 const ts = (n: number, hour = 10) => `${daysAgo(n)}T${hour.toString().padStart(2, '0')}:15:00`;
-const photo = (seed: string) => `https://picsum.photos/seed/rentsure-${seed}/900/600`;
+const photo = (name: string) => `asset:${name}`; // see utils/photos.ts
 
 export const DEMO_TENANT_EMAIL = 'tenant@rentsure.demo';
 export const DEMO_LANDLORD_EMAIL = 'landlord@rentsure.demo';
@@ -119,7 +119,7 @@ export const properties: Property[] = [
     amenities: ['Prepaid meter', 'Borehole water', 'Fenced & gated', 'Parking', 'POP ceiling', 'Wardrobes'],
     requirements: ['Proof of income or employment letter', 'Valid government ID', 'One guarantor'],
     inspection: 'Weekdays 10am – 4pm and Saturdays 11am – 2pm. Book through the app; the landlord or caretaker will meet you.',
-    photos: [photo('yaba1'), photo('yaba2'), photo('yaba3')],
+    photos: [photo('yaba1'), photo('yaba2'), photo('yaba3'), photo('yaba4'), photo('yaba5')],
     verificationStatus: 'verified',
     listingStatus: 'listed',
     createdAt: ts(30),
@@ -144,7 +144,7 @@ export const properties: Property[] = [
     amenities: ['Prepaid meter', 'Borehole water', 'Security guard', 'Steady power'],
     requirements: ['Valid government ID'],
     inspection: 'Currently occupied.',
-    photos: [photo('gbagada1'), photo('gbagada2')],
+    photos: [photo('gbagada1'), photo('gbagada2'), photo('gbagada3'), photo('gbagada4')],
     verificationStatus: 'verified',
     listingStatus: 'let',
     createdAt: ts(260),
@@ -169,7 +169,7 @@ export const properties: Property[] = [
     amenities: ['Generator', 'CCTV', 'Fenced & gated', 'Parking', 'Air conditioning', 'Kitchen cabinets', 'Water heater'],
     requirements: ['Proof of income', 'Two guarantors', 'Valid government ID'],
     inspection: 'By appointment, Monday to Saturday.',
-    photos: [photo('lekki1'), photo('lekki2'), photo('lekki3')],
+    photos: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => photo(`lekki${n}`)),
     verificationStatus: 'pending',
     listingStatus: 'listed',
     createdAt: ts(4),
@@ -194,7 +194,7 @@ export const properties: Property[] = [
     amenities: ['Prepaid meter', 'Internet ready', 'Wardrobes', 'Inverter'],
     requirements: ['Valid government ID', 'Student ID or employment letter'],
     inspection: 'Weekends only. Message to arrange a time.',
-    photos: [photo('akoka1'), photo('akoka2')],
+    photos: [1, 2, 3, 4, 5].map((n) => photo(`akoka${n}`)),
     verificationStatus: 'verified',
     listingStatus: 'listed',
     createdAt: ts(12),
@@ -218,7 +218,7 @@ export const properties: Property[] = [
     amenities: ['Prepaid meter', 'Borehole water', 'Fenced & gated'],
     requirements: ['Valid government ID'],
     inspection: 'Daily between 9am and 5pm.',
-    photos: [photo('bodija1'), photo('bodija2')],
+    photos: [1, 2, 3, 4, 5].map((n) => photo(`bodija${n}`)),
     verificationStatus: 'verified',
     listingStatus: 'listed',
     createdAt: ts(20),
@@ -243,7 +243,7 @@ export const properties: Property[] = [
     amenities: ['Steady power', 'Air conditioning', 'Internet ready', 'Security guard', 'Gym'],
     requirements: ['Employment letter', 'Valid government ID'],
     inspection: 'Virtual tour available; in-person on weekdays.',
-    photos: [photo('wuse1'), photo('wuse2'), photo('wuse3')],
+    photos: [1, 2, 3, 4].map((n) => photo(`wuse${n}`)),
     verificationStatus: 'verified',
     listingStatus: 'listed',
     createdAt: ts(8),
@@ -451,7 +451,7 @@ export const maintenance: MaintenanceRequest[] = [
     title: 'Leaking kitchen sink',
     description: 'Water is dripping from the pipe under the kitchen sink and the cabinet floor is getting soaked.',
     urgency: 'medium',
-    photos: [photo('sink')],
+    photos: [photo('gbagada3')], // the Gbagada kitchen sink
     status: 'in_progress',
     assignee: { name: 'Emeka (Plumber)', phone: '+234 810 555 0190', scheduledFor: addDays(today, 1) },
     updates: [

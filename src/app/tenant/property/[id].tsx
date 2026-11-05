@@ -70,6 +70,8 @@ export default function PropertyDetails() {
                     : router.push(`/tenant/application/${myApp.id}`)
                 }
               />
+            ) : property.listingStatus === 'let' ? (
+              <Button title="Already let" icon="key-outline" style={{ flex: 1 }} disabled onPress={() => {}} />
             ) : (
               <Button
                 title="Apply to rent"

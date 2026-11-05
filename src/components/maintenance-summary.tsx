@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { photoSource } from '@/utils/photos';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppText, Badge, Card, InfoRow, SectionHeader, Timeline } from '@/components/ui';
@@ -25,7 +26,7 @@ export function MaintenanceSummary({ request, viewer }: { request: MaintenanceRe
         {request.photos.length > 0 && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: Spacing.sm }}>
             {request.photos.map((uri, i) => (
-              <Image key={uri + i} source={uri} style={styles.photo} contentFit="cover" accessibilityLabel={`Photo ${i + 1}`} />
+              <Image key={uri + i} source={photoSource(uri)} style={styles.photo} contentFit="cover" accessibilityLabel={`Photo ${i + 1}`} />
             ))}
           </ScrollView>
         )}

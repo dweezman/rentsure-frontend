@@ -1,6 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
 import { Image } from 'expo-image';
+import { photoSource } from '@/utils/photos';
 import * as ImagePicker from 'expo-image-picker';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -42,7 +43,7 @@ export function PhotoPicker({
       <View style={styles.grid}>
         {value.map((uri, i) => (
           <View key={uri + i} style={styles.thumb}>
-            <Image source={uri} style={StyleSheet.absoluteFill} contentFit="cover" />
+            <Image source={photoSource(uri)} style={StyleSheet.absoluteFill} contentFit="cover" />
             <Pressable
               accessibilityLabel="Remove photo"
               onPress={() => onChange(value.filter((_, j) => j !== i))}
