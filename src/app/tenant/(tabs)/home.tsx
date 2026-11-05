@@ -20,6 +20,7 @@ import { Colors, Radius, Spacing } from '@/constants/theme';
 import {
   installmentStatus,
   useActiveTenancy,
+  usePendingAgreement,
   useProperty,
   useStore,
   useTenancyInstallments,
@@ -29,7 +30,9 @@ import { installmentMeta, maintenanceMeta } from '@/utils/labels';
 
 export default function MyHome() {
   const tenancy = useActiveTenancy();
+  const pending = usePendingAgreement();
   const property = useProperty(tenancy?.propertyId);
+  const pendingProperty = useProperty(pending?.propertyId);
   const installments = useTenancyInstallments(tenancy?.id);
   const { state } = useStore();
 
@@ -56,7 +59,7 @@ export default function MyHome() {
   const daysLeft = daysUntil(tenancy.endDate);
 
   const actions: { icon: keyof typeof Ionicons.glyphMap; label: string; href: Href }[] = [
-    { icon: 'document-text-outline', label: 'Agreement', href: '/tenant/agreement' },
+    { icon: 'document-text-outline', label: 'Agreement', href: { pathname: '/tenant/agreement', params: { id: tenancy.id } } },
     { icon: 'receipt-outline', label: 'Payments', href: '/tenant/payments' },
     { icon: 'construct-outline', label: 'Request repair', href: '/tenant/maintenance/new' },
     { icon: 'chatbox-ellipses-outline', label: 'Report issue', href: { pathname: '/tenant/maintenance/new', params: { category: 'other' } } },
@@ -66,14 +69,18 @@ export default function MyHome() {
     <Screen>
       <PropertyCard compact property={property} onPress={() => router.push(`/tenant/property/${property.id}`)} />
 
-      {tenancy.agreementStatus === 'sent' && (
+      {pending && (
         <Banner
           tone="warning"
           icon="create-outline"
           title="Your tenancy agreement is ready"
-          message="Please review and sign it to confirm your tenancy."
+          message={
+            pending.id === tenancy.id
+              ? 'Please review and sign it to confirm your tenancy.'
+              : `Your new agreement for ${pendingProperty?.title ?? 'a new home'} is waiting. Review and sign it to confirm.`
+          }
           actionLabel="Review & sign"
-          onAction={() => router.push('/tenant/agreement')}
+          onAction={() => router.push({ pathname: '/tenant/agreement', params: { id: pending.id } })}
         />
       )}
 

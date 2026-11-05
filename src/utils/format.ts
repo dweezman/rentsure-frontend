@@ -106,7 +106,11 @@ export function isEmail(v: string): boolean {
 }
 
 export function isPhone(v: string): boolean {
-  return /^\+?[0-9\s-]{10,15}$/.test(v.trim());
+  // Allow spaces, dashes and brackets (e.g. "+234 803 555 0142"); count only the digits.
+  const t = v.trim();
+  if (!/^\+?[0-9\s()-]+$/.test(t)) return false;
+  const digits = t.replace(/\D/g, '').length;
+  return digits >= 10 && digits <= 15;
 }
 
 export function newId(prefix: string): string {

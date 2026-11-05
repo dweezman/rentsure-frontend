@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 import {
@@ -16,14 +17,15 @@ import {
   TextField,
 } from '@/components/ui';
 import { Colors, Spacing } from '@/constants/theme';
-import { useActiveTenancy, useCurrentUser, useProperty, useStore, useUser } from '@/store/app-store';
+import { useCurrentUser, useTenantTenancy, useProperty, useStore, useUser } from '@/store/app-store';
 import { confirm } from '@/utils/dialog';
 import { formatDate, formatDateTime, formatMoney, scheduleMonths } from '@/utils/format';
 import { agreementMeta, scheduleLabel } from '@/utils/labels';
 
 export default function Agreement() {
   const me = useCurrentUser();
-  const tenancy = useActiveTenancy();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const tenancy = useTenantTenancy(id);
   const property = useProperty(tenancy?.propertyId);
   const landlord = useUser(tenancy?.landlordId);
   const { actions } = useStore();

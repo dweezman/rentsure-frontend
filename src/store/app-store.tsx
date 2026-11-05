@@ -25,7 +25,7 @@ import type {
   Tenancy,
   User,
 } from '@/types/models';
-import { daysUntil, newId } from '@/utils/format';
+import { daysUntil, newId, todayISO } from '@/utils/format';
 
 interface State {
   currentUserId: string | null;
@@ -510,10 +510,35 @@ export function useTenancyInstallments(tenancyId: string | undefined) {
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
 }
 
-/** The tenant's current tenancy, if any. */
+/**
+ * The tenant's current home, if any. A signed tenancy wins over one still waiting for a signature,
+ * so a tenant who is moving keeps seeing the home they live in (rent, repairs) until the new one is signed.
+ */
 export function useActiveTenancy() {
   const { state, currentUser } = useStore();
-  return state.tenancies.find((t) => t.tenantId === currentUser?.id && t.agreementStatus !== 'ended');
+  const mine = state.tenancies.filter((t) => t.tenantId === currentUser?.id && t.agreementStatus !== 'ended');
+  const today = todayISO();
+  const signed = mine.filter((t) => t.agreementStatus === 'signed');
+  return (
+    signed.find((t) => t.startDate <= today && t.endDate >= today) ??
+    signed.sort((a, b) => a.startDate.localeCompare(b.startDate))[0] ??
+    mine[0]
+  );
+}
+
+/** A tenancy agreement the landlord has sent and the tenant still needs to sign, if any. */
+export function usePendingAgreement() {
+  const { state, currentUser } = useStore();
+  return state.tenancies.find((t) => t.tenantId === currentUser?.id && t.agreementStatus === 'sent');
+}
+
+/** A specific tenancy of the current tenant, or their pending agreement, or their current home. */
+export function useTenantTenancy(id?: string) {
+  const { state, currentUser } = useStore();
+  const pending = usePendingAgreement();
+  const active = useActiveTenancy();
+  const byId = id ? state.tenancies.find((t) => t.id === id && t.tenantId === currentUser?.id) : undefined;
+  return byId ?? pending ?? active;
 }
 
 export function useUnreadCount() {
