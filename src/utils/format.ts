@@ -4,7 +4,7 @@ export function formatMoney(amount: number): string {
   return '₦' + Math.round(amount).toLocaleString('en-NG');
 }
 
-/** ₦1.2M / ₦850k — for tight spaces like cards. */
+/** Short money amounts like ₦1.2M or ₦850k, for small spaces like cards. */
 export function formatMoneyShort(amount: number): string {
   if (amount >= 1_000_000) {
     const m = amount / 1_000_000;
@@ -21,7 +21,7 @@ export function periodLabel(period: RentPeriod): string {
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function parseDate(value: string): Date {
-  // 'YYYY-MM-DD' is parsed as local time so dates don't shift by a day.
+  // Read plain dates in local time, so a date never shows up as the day before.
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     const [y, m, d] = value.split('-').map(Number);
     return new Date(y, m - 1, d);
@@ -65,7 +65,7 @@ export function addDays(iso: string, days: number): string {
   return toISODate(d);
 }
 
-/** Whole days from today until the date (negative if in the past). */
+/** How many days from today until the date. The number is negative if the date has passed. */
 export function daysUntil(iso: string): number {
   const today = parseDate(todayISO()).getTime();
   return Math.round((parseDate(iso).getTime() - today) / 86_400_000);
@@ -106,7 +106,7 @@ export function isEmail(v: string): boolean {
 }
 
 export function isPhone(v: string): boolean {
-  // Allow spaces, dashes and brackets (e.g. "+234 803 555 0142"); count only the digits.
+  // Spaces, dashes and brackets are fine, like "+234 803 555 0142". Only the digits are counted.
   const t = v.trim();
   if (!/^\+?[0-9\s()-]+$/.test(t)) return false;
   const digits = t.replace(/\D/g, '').length;

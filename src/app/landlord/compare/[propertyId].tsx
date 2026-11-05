@@ -8,7 +8,7 @@ import { useProperty, useStore } from '@/store/app-store';
 import { formatDate, formatMoney } from '@/utils/format';
 import { applicationMeta, employmentLabel } from '@/utils/labels';
 
-/** Side-by-side view of every applicant for one property. */
+/** Shows every applicant for one property next to each other, so the landlord can compare them. */
 export default function CompareApplicants() {
   const { propertyId } = useLocalSearchParams<{ propertyId: string }>();
   const property = useProperty(propertyId);
@@ -26,7 +26,7 @@ export default function CompareApplicants() {
     );
   }
 
-  // Rent as a share of monthly income — a common affordability check.
+  // How much of their monthly income the rent would take. This is a common way to check if someone can afford it.
   const monthlyRent = property.rentPeriod === 'year' ? property.rent / 12 : property.rent;
   const highestIncome = Math.max(...apps.map((a) => a.monthlyIncome ?? 0));
 

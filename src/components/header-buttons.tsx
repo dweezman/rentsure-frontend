@@ -6,7 +6,7 @@ import { AppText, Avatar } from '@/components/ui';
 import { Colors, Spacing } from '@/constants/theme';
 import { useStore, useUnreadCount } from '@/store/app-store';
 
-/** Bell + avatar shown in the top-right of the dashboards. */
+/** The bell and profile picture in the top right corner. */
 export function HeaderActions({ profileHref }: { profileHref: Href }) {
   const unread = useUnreadCount();
   const { currentUser } = useStore();

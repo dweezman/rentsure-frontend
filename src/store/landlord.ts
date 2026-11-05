@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useStore } from './app-store';
 
-/** Everything that belongs to the signed-in landlord. */
+/** Everything that belongs to the landlord who is logged in. */
 export function useLandlordData() {
   const { state, currentUser } = useStore();
   return useMemo(() => {

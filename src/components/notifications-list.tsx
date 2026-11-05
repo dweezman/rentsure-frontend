@@ -7,14 +7,14 @@ import { Colors, Spacing } from '@/constants/theme';
 import { useStore } from '@/store/app-store';
 import { formatDateTime } from '@/utils/format';
 
-/** Shared notifications screen for tenants and landlords. */
+/** The notifications screen. Tenants and landlords both use it. */
 export function NotificationsList() {
   const { state, currentUser, actions } = useStore();
   const items = state.notifications
     .filter((n) => n.userId === currentUser?.id)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
-  // Mark as read when leaving, so unread dots are visible while the screen is open.
+  // Mark everything as read when the user leaves, so they can still see which ones were new while they look.
   useEffect(() => () => actions.markAllNotificationsRead(), [actions]);
 
   if (!items.length) {

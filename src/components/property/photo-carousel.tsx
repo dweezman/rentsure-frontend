@@ -6,7 +6,7 @@ import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-nati
 import { AppText } from '@/components/ui';
 import { Colors, MaxContentWidth } from '@/constants/theme';
 
-/** Swipeable photo gallery with a "2 / 5" counter. */
+/** A photo gallery you can swipe through, with a counter like "2 / 5". */
 export function PhotoCarousel({ photos, title }: { photos: string[]; title: string }) {
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);

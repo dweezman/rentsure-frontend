@@ -39,7 +39,7 @@ interface Option<T extends string> {
 
 interface ChipGroupProps<T extends string> {
   options: readonly Option<T>[];
-  /** Horizontal scroll row (filters) instead of wrapping (forms). */
+  /** Put the options in one row you can scroll sideways, instead of wrapping onto new lines. */
   scroll?: boolean;
 }
 

@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 
 import { stackScreenOptions } from '@/constants/navigation';
 
-/** Tenant area: bottom tabs plus the detail screens they open. */
+/** All the tenant screens: the main tabs, plus the pages you open from them. */
 export default function TenantLayout() {
   return (
     <Stack screenOptions={stackScreenOptions}>

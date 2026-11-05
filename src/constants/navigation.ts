@@ -5,7 +5,7 @@ import { Colors, FontFamily } from './theme';
 
 type StackOptions = Extract<ComponentProps<typeof Stack>['screenOptions'], object>;
 
-/** Shared header look for every stack. */
+/** How the top bar looks on every screen. */
 export const stackScreenOptions: StackOptions = {
   headerTintColor: Colors.primary,
   headerTitleStyle: { color: Colors.text, fontFamily: FontFamily, fontWeight: '600' },

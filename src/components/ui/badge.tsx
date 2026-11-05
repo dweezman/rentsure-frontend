@@ -25,7 +25,7 @@ export function Badge({ label, tone = 'neutral', icon }: BadgeProps) {
   );
 }
 
-/** A status badge driven by one of the `*Meta` maps in utils/labels. */
+/** A small coloured label for a status. The words and colours come from utils/labels. */
 export function StatusBadge({ meta }: { meta: { label: string; tone: Tone } }) {
   return <Badge label={meta.label} tone={meta.tone} />;
 }
@@ -39,8 +39,8 @@ const verificationIcon: Record<VerificationStatus, keyof typeof Ionicons.glyphMa
 };
 
 /**
- * Trust badge for landlords and properties. `subject` sets the wording,
- * e.g. "Verified landlord" or "Property pending review".
+ * The badge that shows whether a landlord or property has been checked,
+ * for example "Verified landlord" or "Verification pending".
  */
 export function VerificationBadge({
   status,

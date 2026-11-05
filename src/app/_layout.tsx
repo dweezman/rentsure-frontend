@@ -4,11 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import { AppStoreProvider, useStore } from '@/store/app-store';
 
 /**
- * Root navigator. Which screens exist depends on who is signed in:
- *   signed out / unverified contact → (auth) screens
- *   tenant                          → /tenant/...
- *   landlord                        → /landlord/...
- * Changing the signed-in user automatically moves to the right area.
+ * This decides which part of the app a person can see.
+ * If nobody is logged in, or they haven't confirmed their email or phone yet, they see the sign-in screens.
+ * Tenants only see the tenant screens, and landlords only see the landlord screens.
+ * When someone logs in or out, the app moves them to the right part on its own.
  */
 function RootNavigator() {
   const { currentUser } = useStore();

@@ -1,5 +1,5 @@
 /**
- * Small layout pieces used across screens.
+ * Small building blocks used on many screens.
  */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ReactNode } from 'react';
@@ -37,7 +37,7 @@ export function SectionHeader({
   );
 }
 
-/** Label on the left, value on the right. */
+/** A row with a label on the left and its value on the right. */
 export function InfoRow({ label, value, strong }: { label: string; value: ReactNode; strong?: boolean }) {
   return (
     <View style={styles.infoRow}>
@@ -178,7 +178,7 @@ export function Avatar({ name, uri, size = 44 }: { name: string; uri?: string; s
   );
 }
 
-/** A coloured call-out box for warnings, tips and next steps. */
+/** A coloured box for warnings, tips and what to do next. */
 export function Banner({
   tone = 'info',
   icon,
@@ -215,7 +215,7 @@ export function Banner({
   );
 }
 
-/** − 2 + number stepper. */
+/** A number with minus and plus buttons on each side. */
 export function Stepper({
   value,
   onChange,
@@ -253,7 +253,7 @@ export function Stepper({
   );
 }
 
-/** Two or three equal tabs inside a screen, e.g. Active / Closed. */
+/** Two or three switch buttons inside a screen, like Active and Closed. */
 export function Segmented<T extends string>({
   options,
   value,

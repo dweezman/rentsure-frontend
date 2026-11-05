@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 
 import { useStore } from '@/store/app-store';
 
-/** Entry point: sends each user to the right place. */
+/** The first screen. It sends each person to the right part of the app. */
 export default function Index() {
   const { currentUser } = useStore();
   if (!currentUser) return <Redirect href="/welcome" />;

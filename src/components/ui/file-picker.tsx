@@ -11,7 +11,7 @@ import { newId } from '@/utils/format';
 
 import { AppText } from './text';
 
-/** Grid of photo thumbnails with an "Add photo" tile. Values are image URIs. */
+/** Shows the chosen photos as small squares, with an "Add photo" square to add more. */
 export function PhotoPicker({
   value,
   onChange,
@@ -73,7 +73,7 @@ export function PhotoPicker({
   );
 }
 
-/** List of attached documents (PDFs or images) with an "Attach" button. */
+/** Shows the attached documents, like PDFs or pictures, with a button to attach more. */
 export function DocumentList({
   value,
   onChange,

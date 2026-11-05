@@ -19,10 +19,10 @@ export const tabScreenOptions: TabOptions = {
   sceneStyle: { backgroundColor: Colors.background },
 };
 
-/** Screens at least this wide (laptops, desktops) get a sidebar instead of bottom tabs. */
+/** Screens this wide or wider, like laptops, get a menu on the left instead of tabs at the bottom. */
 export const WideBreakpoint = 1024;
 
-/** Tab options for the current screen size: bottom tabs on phones, a left sidebar on wide screens. */
+/** Picks the menu style for the screen size: tabs at the bottom on phones, a menu on the left on bigger screens. */
 export function useTabScreenOptions(): TabOptions {
   const { width } = useWindowDimensions();
   if (width < WideBreakpoint) return tabScreenOptions;
@@ -38,7 +38,7 @@ export function useTabScreenOptions(): TabOptions {
   };
 }
 
-/** Filled icon when the tab is active, outline otherwise. */
+/** Shows a filled icon for the tab you're on, and an outline icon for the others. */
 export function tabIcon(name: string) {
   const TabIcon = ({ color, focused, size }: { color: ColorValue; focused: boolean; size: number }) => (
     <Ionicons

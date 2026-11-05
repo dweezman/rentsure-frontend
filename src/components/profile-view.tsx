@@ -21,7 +21,7 @@ import { formatDate, isPhone } from '@/utils/format';
 
 type Link = { icon: Parameters<typeof ListRow>[0]['icon']; title: string; subtitle?: string; href: Href };
 
-/** Profile & settings, shared by both roles. */
+/** The profile and settings screen. Tenants and landlords both use it. */
 export function ProfileView({ links }: { links: Link[] }) {
   const me = useCurrentUser();
   const { actions } = useStore();

@@ -1,17 +1,16 @@
 /**
- * RentSure data models.
+ * The shape of every piece of data in the app: users, properties, applications, rent and so on.
  *
- * These types describe what the mobile app expects from the backend.
- * Backend teammates: keep API responses in this shape (or tell the frontend
- * team what changed) so the screens keep working.
+ * Backend team: please send data from the API in these shapes. If you need to change one,
+ * let the frontend team know, because the screens rely on them.
  *
- * Dates are ISO strings: 'YYYY-MM-DD' for calendar dates, full ISO for timestamps.
- * Money is a whole number in Naira (no kobo).
+ * Dates are written as text. Plain dates look like '2026-11-25'. Exact times include the time of day too.
+ * Money is a whole number of Naira, with no kobo.
  */
 
 export type Role = 'tenant' | 'landlord';
 
-/** Identity / landlord / property verification lifecycle. */
+/** The steps a verification goes through, for a person or a property. */
 export type VerificationStatus =
   | 'not_submitted'
   | 'pending'
@@ -26,7 +25,7 @@ export interface User {
   email: string;
   phone: string;
   contactVerified: boolean;
-  /** Identity verification (tenants) or landlord verification (landlords). */
+  /** For tenants this is their ID check. For landlords it is their landlord check. */
   verificationStatus: VerificationStatus;
   verificationNote?: string;
   avatarUrl?: string;
@@ -62,7 +61,7 @@ export interface Property {
   rent: number;
   rentPeriod: RentPeriod;
   deposit: number;
-  /** Every other fee the tenant pays up front (agency, legal, service charge…). */
+  /** Any other fees the tenant pays at the start, such as agency, legal or service charges. */
   otherCharges: Charge[];
   bedrooms: number;
   bathrooms: number;
@@ -72,7 +71,7 @@ export interface Property {
   photos: string[];
   verificationStatus: VerificationStatus;
   verificationNote?: string;
-  /** Listing visible to tenants. Draft listings are only visible to the landlord. */
+  /** Whether tenants can see this listing. Only the landlord can see a draft. */
   listingStatus: 'draft' | 'listed' | 'let' | 'suspended';
   createdAt: string;
 }
@@ -119,7 +118,7 @@ export interface RentalApplication {
   occupants: number;
   message?: string;
   documents: AttachedFile[];
-  /** Latest landlord request for more information, if any. */
+  /** The landlord's most recent request for more information, if there is one. */
   infoRequest?: string;
   infoResponse?: string;
   decisionReason?: string;
@@ -140,7 +139,7 @@ export interface Tenancy {
   applicationId: string;
   startDate: string;
   endDate: string;
-  /** Rent for a full year, used to work out each instalment. */
+  /** The rent for a whole year. Each payment amount is worked out from this. */
   annualRent: number;
   schedule: PaymentSchedule;
   deposit: number;
@@ -148,14 +147,14 @@ export interface Tenancy {
   agreementStatus: AgreementStatus;
   sentAt?: string;
   signedAt?: string;
-  /** Typed-name e-signature from the tenant. */
+  /** The tenant signs by typing their full name. */
   tenantSignature?: string;
   createdAt: string;
 }
 
 export type PaymentMethod = 'bank_transfer' | 'card' | 'cash' | 'other';
 
-/** One rent instalment on a tenancy. Status is derived from paidAt + dueDate. */
+/** One rent payment in a tenancy. Whether it is paid, due or late is worked out from its dates. */
 export interface Installment {
   id: string;
   tenancyId: string;
@@ -243,6 +242,6 @@ export interface AppNotification {
   body: string;
   createdAt: string;
   read: boolean;
-  /** In-app route to open when tapped. */
+  /** The screen to open when the notification is tapped. */
   href?: string;
 }

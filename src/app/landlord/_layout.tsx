@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 
 import { stackScreenOptions } from '@/constants/navigation';
 
-/** Landlord area: bottom tabs plus the detail screens they open. */
+/** All the landlord screens: the main tabs, plus the pages you open from them. */
 export default function LandlordLayout() {
   return (
     <Stack screenOptions={stackScreenOptions}>

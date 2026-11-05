@@ -11,7 +11,7 @@ export interface TextFieldProps extends TextInputProps {
   error?: string | null;
   hint?: string;
   icon?: keyof typeof Ionicons.glyphMap;
-  /** Shows a ₦ prefix and only allows digits. */
+  /** For money: shows ₦ in front and only lets you type numbers. */
   money?: boolean;
   required?: boolean;
 }

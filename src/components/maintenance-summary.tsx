@@ -8,7 +8,7 @@ import type { MaintenanceRequest, Role } from '@/types/models';
 import { formatDate, formatDateTime } from '@/utils/format';
 import { maintenanceCategoryLabel, maintenanceMeta, urgencyMeta } from '@/utils/labels';
 
-/** Request details + photos + history. Shared by tenant and landlord screens. */
+/** Shows a repair request: the details, the photos and what has happened so far. Tenants and landlords both use it. */
 export function MaintenanceSummary({ request, viewer }: { request: MaintenanceRequest; viewer: Role }) {
   const who = (by: Role) => (by === viewer ? 'you' : by);
   return (

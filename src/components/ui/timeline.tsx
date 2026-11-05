@@ -11,7 +11,7 @@ export interface TimelineItem {
   tone?: Tone;
 }
 
-/** Vertical history list, newest last. */
+/** A list of what happened, from oldest to newest. */
 export function Timeline({ items }: { items: TimelineItem[] }) {
   return (
     <View>
@@ -42,7 +42,7 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
   );
 }
 
-/** Horizontal progress for a fixed sequence of steps. */
+/** A progress bar that shows which step something is on. */
 export function ProgressSteps({ steps, current }: { steps: string[]; current: number }) {
   return (
     <View style={styles.steps}>

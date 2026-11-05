@@ -1,6 +1,6 @@
 /**
- * Human-readable labels and badge colours for every status in the app.
- * Keep wording here so it stays consistent across screens.
+ * The words and colours shown for every status in the app, like "Under review" or "Paid".
+ * Change the wording here, so it stays the same on every screen.
  */
 import type { Tone } from '@/constants/theme';
 import type {

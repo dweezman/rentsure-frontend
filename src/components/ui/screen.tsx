@@ -15,9 +15,9 @@ import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
 
 interface ScreenProps {
   children: ReactNode;
-  /** Sticky content pinned to the bottom, e.g. the main action button. */
+  /** Buttons that stay at the bottom of the screen, like the main action button. */
   footer?: ReactNode;
-  /** Add the top safe-area inset (only for screens without a header). */
+  /** Leave space at the top for the phone's status bar. Only needed on screens without a top bar. */
   safeTop?: boolean;
   scroll?: boolean;
   contentStyle?: StyleProp<ViewStyle>;
@@ -25,8 +25,9 @@ interface ScreenProps {
 }
 
 /**
- * Standard page wrapper: grey background, padding, a max width on big
- * screens, keyboard avoidance and an optional sticky footer.
+ * The basic layout every screen uses: a grey background, some space around the edges,
+ * a limit on how wide the page gets on big screens, moving up when the keyboard opens,
+ * and optional buttons that stay at the bottom.
  */
 export function Screen({ children, footer, safeTop, scroll = true, contentStyle, refreshControl }: ScreenProps) {
   const insets = useSafeAreaInsets();
@@ -51,7 +52,7 @@ export function Screen({ children, footer, safeTop, scroll = true, contentStyle,
       {footer && (
         <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
           <View style={styles.footerInner}>
-            {/* A single button fills the footer; a group (fragment) lays out its own widths. */}
+            {/* One button on its own stretches across the bottom. A group of buttons sets its own sizes. */}
             {isValidElement(footer) && footer.type !== Fragment ? <View style={styles.flex}>{footer}</View> : footer}
           </View>
         </View>

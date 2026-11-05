@@ -1,5 +1,6 @@
 /**
- * RentSure design tokens. Change colours, spacing and type here, not in screens.
+ * The app's colours, spacing and text sizes.
+ * To change how the whole app looks, change it here instead of on each screen.
  */
 import '@/global.css';
 
@@ -76,7 +77,7 @@ export const Type = {
   tiny: { fontSize: 11, lineHeight: 14, fontWeight: '600' },
 } as const;
 
-/** Content never stretches wider than this on tablets and the web. */
+/** The widest the page content gets on tablets and computers. */
 export const MaxContentWidth = 720;
 
 export const Shadow = Platform.select({

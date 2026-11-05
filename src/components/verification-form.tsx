@@ -38,8 +38,8 @@ type Authority = (typeof AUTHORITY_TYPES)[number]['value'];
 const STATUS_STEP = { not_submitted: 0, more_info: 0, rejected: 0, pending: 1, verified: 2 } as const;
 
 /**
- * Identity verification (tenants) and landlord verification (landlords).
- * Landlords also prove they own or are authorised to let their property.
+ * The form for checking who someone is. Tenants send their ID.
+ * Landlords also show that they own the property or are allowed to rent it out.
  */
 export function VerificationForm({ mode }: { mode: 'identity' | 'landlord' }) {
   const me = useCurrentUser();

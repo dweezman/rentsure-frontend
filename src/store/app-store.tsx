@@ -1,9 +1,10 @@
 /**
- * App state and actions.
+ * This file holds all the app's data and everything the app can do with it,
+ * like logging in, applying for a place or recording a payment.
  *
- * Right now everything lives in memory and starts from `src/data/mock.ts`.
- * Backend teammates: each action below is where an API call goes. Keep the
- * function names and arguments the same so the screens don't need to change.
+ * For now the data starts from the sample data in src/data/mock.ts.
+ * Backend team: each action below is where a call to your API should go. Keep the
+ * names and inputs the same, and the screens won't need to change.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -78,8 +79,9 @@ const now = () => new Date().toISOString();
 const STORAGE_KEY = 'rentsure-state-v2';
 
 /**
- * Saved demo data keeps old photo lists, so sample properties and repair requests always take their photos
- * from the latest mock data. Anything the user created (new listings, new repair requests) is left alone.
+ * The browser keeps an old copy of the demo data, which may have old photo lists.
+ * So the sample houses and repair requests always use the photos from the latest sample data.
+ * Anything the user added themselves, like a new listing or repair request, is left as it is.
  */
 function withLatestSamplePhotos(s: State): State {
   const propPhotos = new Map(mock.properties.map((p) => [p.id, p.photos]));
@@ -96,8 +98,8 @@ function useAppState() {
   const [hydrated, setHydrated] = useState(false);
   const update = useCallback((fn: (s: State) => State) => setState(fn), []);
 
-  // Keep the session and demo data across reloads (localStorage on web).
-  // Backend teammates: once the API is live, only persist the auth token here.
+  // Save the data on the device, so the user stays logged in and the demo survives a page reload.
+  // Backend team: once the API works, only save the login token here, not all the data.
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
@@ -118,8 +120,8 @@ function useAppState() {
 
   const actions = useMemo(
     () => ({
-      // ---------- Auth ----------
-      /** Returns an error message, or null on success. */
+      // ---------- Logging in and signing up ----------
+      /** Gives back an error message if it fails, or nothing if it worked. */
       login(email: string, _password: string): string | null {
         const user = state.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
         if (!user) return 'No account found with that email.';
@@ -161,7 +163,7 @@ function useAppState() {
           users: s.users.map((u) => (u.id === s.currentUserId ? { ...u, ...patch } : u)),
         }));
       },
-      /** Identity (tenant) or landlord verification. Goes to admin review. */
+      /** Sends the user's ID or landlord documents to the admin team to check. */
       submitVerification() {
         update((s) => ({
           ...s,
@@ -171,8 +173,8 @@ function useAppState() {
         }));
       },
 
-      // ---------- Tenant: applications ----------
-      /** Creates or updates the tenant's application. Returns its id. */
+      // ---------- Tenant applications ----------
+      /** Saves a new application or updates an existing one, and gives back its ID. */
       saveApplication(input: ApplicationInput, submit: boolean, existingId?: string): string {
         const id = existingId ?? newId('a');
         update((s) => {
@@ -232,7 +234,7 @@ function useAppState() {
         }));
       },
 
-      // ---------- Landlord: applications ----------
+      // ---------- Landlord deciding on applications ----------
       setApplicationStatus(id: string, status: ApplicationStatus, note?: string) {
         update((s) => {
           const app = s.applications.find((a) => a.id === id);
@@ -260,7 +262,7 @@ function useAppState() {
         });
       },
 
-      // ---------- Landlord: properties ----------
+      // ---------- Landlord properties ----------
       addProperty(input: PropertyInput, submitForVerification: boolean): string {
         const id = newId('p');
         update((s) => ({
@@ -294,7 +296,7 @@ function useAppState() {
         }));
       },
 
-      // ---------- Tenancies & rent ----------
+      // ---------- Tenancies and rent ----------
       createTenancy(input: TenancyInput, send: boolean): string {
         const id = newId('t');
         update((s) => {
@@ -371,7 +373,7 @@ function useAppState() {
         });
       },
 
-      // ---------- Maintenance ----------
+      // ---------- Repairs ----------
       createMaintenance(tenancyId: string, input: MaintenanceInput): string {
         const id = newId('m');
         update((s) => {
@@ -422,7 +424,7 @@ function useAppState() {
         });
       },
 
-      // ---------- Fraud ----------
+      // ---------- Fraud reports ----------
       submitFraudReport(input: FraudInput): FraudReport {
         const report: FraudReport = {
           ...input,
@@ -444,14 +446,14 @@ function useAppState() {
         }));
       },
 
-      // ---------- Demo only ----------
-      /** Puts all sample data back the way it started (keeps you signed in). */
+      // ---------- Only for the demo ----------
+      /** Puts all the sample data back the way it started. You stay logged in. */
       resetDemoData() {
         update((s) => ({ ...initialState, currentUserId: s.currentUserId }));
       },
       /**
-       * Stands in for the admin team approving things, so the demo can move
-       * forward. Remove once the admin dashboard and backend are connected.
+       * Pretends the admin team approved the checks, so the demo can carry on.
+       * Remove this once the admin dashboard and backend are connected.
        */
       demoApproveVerifications() {
         update((s) => ({
@@ -479,7 +481,7 @@ const StoreContext = createContext<Store | null>(null);
 
 export function AppStoreProvider({ children }: { children: ReactNode }) {
   const store = useAppState();
-  // Wait for saved data so a reload doesn't flash the welcome screen.
+  // Wait for the saved data to load first, so the welcome screen doesn't flash up on reload.
   if (!store.hydrated) return null;
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 }
@@ -490,14 +492,14 @@ export function useStore(): Store {
   return ctx;
 }
 
-/** The signed-in user. Only call from screens behind the auth guard. */
+/** The person who is logged in. Only use this on screens that need a logged-in user. */
 export function useCurrentUser(): User {
   const { currentUser } = useStore();
   if (!currentUser) throw new Error('No signed-in user');
   return currentUser;
 }
 
-// ---------- Selectors ----------
+// ---------- Helpers for reading the data ----------
 
 export function installmentStatus(i: Installment): InstallmentStatus {
   if (i.paidAt) return 'paid';
@@ -525,8 +527,9 @@ export function useTenancyInstallments(tenancyId: string | undefined) {
 }
 
 /**
- * The tenant's current home, if any. A signed tenancy wins over one still waiting for a signature,
- * so a tenant who is moving keeps seeing the home they live in (rent, repairs) until the new one is signed.
+ * The home the tenant lives in now, if they have one.
+ * A signed agreement comes first, so a tenant who is moving keeps seeing their current home,
+ * with its rent and repairs, until they sign for the new one.
  */
 export function useActiveTenancy() {
   const { state, currentUser } = useStore();
@@ -540,13 +543,13 @@ export function useActiveTenancy() {
   );
 }
 
-/** A tenancy agreement the landlord has sent and the tenant still needs to sign, if any. */
+/** An agreement the landlord has sent that the tenant still needs to sign, if there is one. */
 export function usePendingAgreement() {
   const { state, currentUser } = useStore();
   return state.tenancies.find((t) => t.tenantId === currentUser?.id && t.agreementStatus === 'sent');
 }
 
-/** A specific tenancy of the current tenant, or their pending agreement, or their current home. */
+/** Finds the tenancy to show. If none is asked for, it shows the one waiting to be signed, or else the current home. */
 export function useTenantTenancy(id?: string) {
   const { state, currentUser } = useStore();
   const pending = usePendingAgreement();

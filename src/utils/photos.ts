@@ -1,9 +1,9 @@
 import type { ImageSource } from 'expo-image';
 
 /**
- * Sample property photos bundled with the app (assets/images/properties/).
- * The mock data refers to them as "asset:<name>" so saved demo state keeps working after a rebuild.
- * Real photos from the backend are normal URLs and pass straight through.
+ * The sample house photos that come with the app, kept in assets/images/properties.
+ * The sample data refers to each photo by a short name like "asset:yaba1", and this file finds the real picture.
+ * Photos from the real backend will be normal web links, and those are used as they are.
  */
 const BUNDLED: Record<string, number> = {
   yaba1: require('@/assets/images/properties/yaba1.jpg'),
@@ -39,7 +39,7 @@ const BUNDLED: Record<string, number> = {
   wuse4: require('@/assets/images/properties/wuse4.jpg'),
 };
 
-/** Turn a stored photo reference into something <Image source> can show. */
+/** Takes a photo name or link and returns a picture the app can show. */
 export function photoSource(ref: string): ImageSource | number | string | null {
   if (ref.startsWith('asset:')) return BUNDLED[ref.slice('asset:'.length)] ?? null;
   return ref;

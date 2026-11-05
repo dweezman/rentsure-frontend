@@ -1,10 +1,10 @@
 /**
- * Demo data so the app works before the backend is ready.
- * Dates are relative to today so the demo always looks current.
+ * Sample data so the app works before the backend is ready.
+ * All dates are counted from today, so the demo always looks up to date.
  *
- * Demo accounts (any password works):
- *   tenant@rentsure.demo    – Adaeze Okafor (tenant with an active tenancy)
- *   landlord@rentsure.demo  – Olumide Adeyemi (verified landlord)
+ * Demo accounts (any password of 6 or more characters works):
+ *   tenant@rentsure.demo is Adaeze Okafor, a tenant who already rents a flat.
+ *   landlord@rentsure.demo is Olumide Adeyemi, a verified landlord.
  */
 import type {
   AppNotification,
@@ -21,7 +21,7 @@ import { addDays, addMonths, scheduleMonths, todayISO } from '@/utils/format';
 const today = todayISO();
 const daysAgo = (n: number) => addDays(today, -n);
 const ts = (n: number, hour = 10) => `${daysAgo(n)}T${hour.toString().padStart(2, '0')}:15:00`;
-const photo = (name: string) => `asset:${name}`; // see utils/photos.ts
+const photo = (name: string) => `asset:${name}`; // utils/photos.ts turns this name into the real picture
 
 export const DEMO_TENANT_EMAIL = 'tenant@rentsure.demo';
 export const DEMO_LANDLORD_EMAIL = 'landlord@rentsure.demo';
@@ -451,7 +451,7 @@ export const maintenance: MaintenanceRequest[] = [
     title: 'Leaking kitchen sink',
     description: 'Water is dripping from the pipe under the kitchen sink and the cabinet floor is getting soaked.',
     urgency: 'medium',
-    photos: [photo('gbagada3')], // the Gbagada kitchen sink
+    photos: [photo('gbagada3')], // the kitchen sink in the Gbagada flat
     status: 'in_progress',
     assignee: { name: 'Emeka (Plumber)', phone: '+234 810 555 0190', scheduledFor: addDays(today, 1) },
     updates: [

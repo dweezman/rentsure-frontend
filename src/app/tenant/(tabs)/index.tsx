@@ -40,7 +40,7 @@ export default function Explore() {
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     const band = PRICE_BANDS.find((b) => b.value === price)!;
-    // Let properties are shown too (marked "Let", no Apply button), listed after the available ones.
+    // Places that are already rented are shown too, at the end. They are marked "Let" and you cannot apply for them.
     return state.properties.filter(
       (p) =>
         (p.listingStatus === 'listed' || p.listingStatus === 'let') &&
@@ -52,7 +52,7 @@ export default function Explore() {
   }, [state.properties, query, type, price, verifiedOnly]);
 
   const twoCol = width >= 640;
-  // Laptops/desktops: wider page and three columns (the sidebar takes ~220px).
+  // On laptops and desktops, use a wider page with three columns of houses.
   const threeCol = width >= 1280;
   const firstName = user.fullName.split(' ')[0];
   const filtered = query || type !== 'all' || price !== 'any' || verifiedOnly;
