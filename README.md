@@ -44,6 +44,8 @@ reach `/tenant/*` and landlords only `/landlord/*`.
 
 ## For the backend team
 
+Full guide for the backend and admin teams: [DOCUMENTATION.md](DOCUMENTATION.md).
+
 - Every data action is in `src/store/app-store.tsx`, inside `actions`. Replace each body with an API
   call and keep the same name and arguments, so the screens don't change.
 - Response shapes are in `src/types/models.ts`.
