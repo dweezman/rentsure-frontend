@@ -1,18 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { AppStoreProvider, useStore } from '@/store/app-store';
 
-SplashScreen.preventAutoHideAsync();
+/**
+ * Root navigator. Which screens exist depends on who is signed in:
+ *   signed out / unverified contact → (auth) screens
+ *   tenant                          → /tenant/...
+ *   landlord                        → /landlord/...
+ * Changing the signed-in user automatically moves to the right area.
+ */
+function RootNavigator() {
+  const { currentUser } = useStore();
+  const signedIn = !!currentUser?.contactVerified;
+  const role = currentUser?.role;
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Protected guard={!signedIn}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && role === 'tenant'}>
+        <Stack.Screen name="tenant" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && role === 'landlord'}>
+        <Stack.Screen name="landlord" />
+      </Stack.Protected>
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AppStoreProvider>
+      <StatusBar style="dark" />
+      <RootNavigator />
+    </AppStoreProvider>
   );
 }

@@ -1,56 +1,60 @@
-# Welcome to your Expo app 👋
+# RentSure — Mobile & Web App (Frontend)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Frontend for RentSure. One codebase runs on **Android, iOS and the web**:
+React Native + Expo (SDK 58) + Expo Router + TypeScript.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run it
 
 ```bash
-npm run reset-project
+cd mobile
+npm install
+npm run web        # opens in the browser at http://localhost:8081
+npm start          # scan the QR code with Expo Go on a phone
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Checks: `npm run typecheck` and `npx eslint src`.
 
-### Other setup steps
+**Demo accounts:** on the welcome screen tap *Tenant demo* or *Landlord demo*, or log in with
+`tenant@rentsure.demo` / `landlord@rentsure.demo` and any password of 6+ characters. The sign-up verification code is `123456`.
+Profile → *Reset demo data* restores the sample data.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Folder structure
 
-## Learn more
+```
+src/
+  app/                    Screens (each file is a route)
+    (auth)/               welcome, login, register, verify
+    tenant/(tabs)/        Explore · Applications · My Home · Profile
+    tenant/...            property, apply, application, agreement, payments, receipt,
+                          maintenance, report (fraud), reports, verify-identity, notifications
+    landlord/(tabs)/      Dashboard · Properties · Applicants · Rent · Repairs
+    landlord/...          property/new, property/[id], compare, application review,
+                          tenancy/new, tenancy/[id], maintenance, verification, profile
+  components/ui/          Shared UI kit (Button, Card, TextField, Badge, Chip, Timeline…)
+  components/             Screen-level pieces shared by both roles
+  constants/theme.ts      Colours, spacing and type. Change the look here.
+  types/models.ts         Data shapes the app expects from the backend
+  data/mock.ts            Sample data used until the backend is ready
+  store/app-store.tsx     App state + every action (login, apply, approve, record payment…)
+  utils/                  Formatting (₦, dates), status labels, dialogs
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Navigation is based on the user's role. `src/app/_layout.tsx` uses protected routes, so tenants can only
+reach `/tenant/*` and landlords only `/landlord/*`.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## For the backend team
 
-## Join the community
+- Every data action is in `src/store/app-store.tsx`, inside `actions`. Replace each body with an API
+  call and keep the same name and arguments, so the screens don't change.
+- Response shapes are in `src/types/models.ts`.
+- State is currently saved locally (AsyncStorage, which uses localStorage on the web) so the demo survives reloads.
+  Once the API is live, only store the auth token there.
+- `demoApproveVerifications` and `resetDemoData` are demo-only. Remove them once the admin dashboard does approvals.
 
-Join our community of developers creating universal apps.
+## Status flows used in the UI
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Application: Draft → Submitted → Under review → (Info requested) → Approved / Rejected / Waitlisted / Withdrawn
+- Verification: Not submitted → Pending review → Verified / Rejected / More info required
+- Agreement: Draft → Sent → Signed
+- Maintenance: Submitted → Accepted / Declined → Assigned → In progress → Resolved
+- Fraud report: Submitted → Under review → Closed (a report is an allegation, not proof)
