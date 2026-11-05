@@ -1,10 +1,11 @@
 import { Tabs } from 'expo-router';
 
 import { HeaderActions } from '@/components/header-buttons';
-import { tabIcon, tabScreenOptions } from '@/constants/tabs';
+import { tabIcon, useTabScreenOptions } from '@/constants/tabs';
 import { useStore } from '@/store/app-store';
 
 export default function LandlordTabs() {
+  const tabOptions = useTabScreenOptions();
   const { state, currentUser } = useStore();
   const myProps = new Set(state.properties.filter((p) => p.landlordId === currentUser?.id).map((p) => p.id));
   const newApps = state.applications.filter((a) => myProps.has(a.propertyId) && a.status === 'submitted').length;
@@ -15,7 +16,7 @@ export default function LandlordTabs() {
   return (
     <Tabs
       screenOptions={{
-        ...tabScreenOptions,
+        ...tabOptions,
         headerRight: () => <HeaderActions profileHref="/landlord/profile" />,
       }}>
       <Tabs.Screen name="index" options={{ title: 'Dashboard', tabBarIcon: tabIcon('grid') }} />

@@ -1,13 +1,14 @@
 import { Tabs } from 'expo-router';
 
 import { HeaderActions } from '@/components/header-buttons';
-import { tabIcon, tabScreenOptions } from '@/constants/tabs';
+import { tabIcon, useTabScreenOptions } from '@/constants/tabs';
 
 export default function TenantTabs() {
+  const tabOptions = useTabScreenOptions();
   return (
     <Tabs
       screenOptions={{
-        ...tabScreenOptions,
+        ...tabOptions,
         headerRight: () => <HeaderActions profileHref="/tenant/profile" />,
       }}>
       <Tabs.Screen name="index" options={{ title: 'Explore', tabBarIcon: tabIcon('search') }} />

@@ -25,7 +25,7 @@ export default function Payments() {
     <Screen>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm }}>
         <StatCard icon="checkmark-done-outline" tone="success" label="Paid" value={formatMoney(totals.received)} />
-        <StatCard icon="alert-circle-outline" tone={totals.overdue ? 'danger' : 'warning'} label="Due now" value={formatMoney(totals.outstanding)} />
+        <StatCard icon="alert-circle-outline" tone={totals.overdue ? 'danger' : 'warning'} label={totals.overdue ? 'Overdue' : 'Due soon'} value={formatMoney(totals.outstanding)} />
       </View>
 
       {totals.next && (

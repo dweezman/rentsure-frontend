@@ -52,11 +52,13 @@ export default function Explore() {
   }, [state.properties, query, type, price, verifiedOnly]);
 
   const twoCol = width >= 640;
+  // Laptops/desktops: wider page and three columns (the sidebar takes ~220px).
+  const threeCol = width >= 1280;
   const firstName = user.fullName.split(' ')[0];
   const filtered = query || type !== 'all' || price !== 'any' || verifiedOnly;
 
   return (
-    <Screen>
+    <Screen contentStyle={threeCol ? styles.wide : undefined}>
       <View style={{ gap: 2 }}>
         <AppText variant="title">Hi {firstName} 👋</AppText>
         <AppText variant="caption">Find a verified place to rent.</AppText>
@@ -114,7 +116,7 @@ export default function Explore() {
       ) : (
         <View style={[styles.grid, twoCol && styles.gridTwo]}>
           {results.map((p) => (
-            <View key={p.id} style={twoCol ? styles.cellTwo : undefined}>
+            <View key={p.id} style={threeCol ? styles.cellThree : twoCol ? styles.cellTwo : undefined}>
               <PropertyCard
                 property={p}
                 landlordStatus={landlordStatus(p.landlordId)}
@@ -133,4 +135,6 @@ const styles = StyleSheet.create({
   grid: { gap: Spacing.lg },
   gridTwo: { flexDirection: 'row', flexWrap: 'wrap' },
   cellTwo: { width: '48.5%' },
+  cellThree: { width: '32%' },
+  wide: { maxWidth: 1100 },
 });

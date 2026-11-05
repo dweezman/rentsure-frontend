@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Fragment, isValidElement, type ReactNode } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -50,7 +50,10 @@ export function Screen({ children, footer, safeTop, scroll = true, contentStyle,
       )}
       {footer && (
         <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
-          <View style={styles.footerInner}>{footer}</View>
+          <View style={styles.footerInner}>
+            {/* A single button fills the footer; a group (fragment) lays out its own widths. */}
+            {isValidElement(footer) && footer.type !== Fragment ? <View style={styles.flex}>{footer}</View> : footer}
+          </View>
         </View>
       )}
     </KeyboardAvoidingView>

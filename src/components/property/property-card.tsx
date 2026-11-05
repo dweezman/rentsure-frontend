@@ -40,7 +40,7 @@ export function PropertyCard({
               {property.listingStatus === 'let' && <Badge label="Let" icon="key-outline" />}
             </View>
           )}
-          <AppText variant="heading" numberOfLines={1}>
+          <AppText variant="heading" numberOfLines={compact ? 1 : 2}>
             {property.title}
           </AppText>
           <View style={styles.meta}>
